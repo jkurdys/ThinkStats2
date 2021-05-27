@@ -1,26 +1,44 @@
-"""This file contains code for use with "Think Stats",
-by Allen B. Downey, available from greenteapress.com
+from __future__ import print_function, division
 
-Copyright 2014 Allen B. Downey
-License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
-"""
-
-from __future__ import print_function
-
-import numpy as np
 import sys
-
-import nsfg
+import numpy as np
 import thinkstats2
+import nsfg
 
+from collections import defaultdict
 
-def main(script):
-    """Tests the functions in this module.
+def ReadFemResp(dct_file='2002FemResp.dct',
+                dat_file='2002FemResp.dat.gz',
+                nrows=None):
+    """Reads the NSFG respondent data.
 
-    script: string script name
+    dct_file: string file name
+    dat_file: string file name
+
+    returns: DataFrame
     """
-    print('%s: All tests passed.' % script)
+    dct = thinkstats2.ReadStataDct(dct_file)
+    df = dct.ReadFixedWidth(dat_file, compression='gzip', nrows=nrows)
+    CleanFemResp(df)
+    return df
 
 
-if __name__ == '__main__':
-    main(*sys.argv)
+def CleanFemResp(df):
+    """Recodes variables from the respondent frame.
+
+    df: DataFrame
+    """
+    pass
+
+def validate():
+    resp = ReadFemResp()
+    pregs = sum(resp.pregnum.value_counts())
+
+    preg = nsfg.ReadFemPreg()
+
+
+if __name__=='__main__':
+    resp = ReadFemResp()
+    preg = nsfg.ReadFemPreg()
+    preg_map = nsfg.MakePregMap(preg)
+    print(preg_map)

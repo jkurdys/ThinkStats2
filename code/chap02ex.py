@@ -21,7 +21,17 @@ def Mode(hist):
 
     returns: value from Hist
     """
-    return 0
+    mval = None
+    mfreq = None
+    for val, freq in hist.Items():
+        if mfreq == None:
+            mfreq = freq
+            mval = val
+        else:
+            if freq > mfreq:
+                mfreq = freq
+                mval = val
+    return mval
 
 
 def AllModes(hist):
@@ -31,7 +41,19 @@ def AllModes(hist):
 
     returns: iterator of value-freq pairs
     """
-    return []
+    sorted_values = sorted(hist.values(), reverse=True)
+    sorted_dict = {}
+    lst = []
+
+    for v in sorted_values:
+        for k in hist.keys():
+            if hist[k] == v:
+                sorted_dict[k] = hist[k]
+    
+    for k, v in sorted_dict.items():
+        lst.append((k,v))
+            
+    return lst
 
 
 def main(script):
